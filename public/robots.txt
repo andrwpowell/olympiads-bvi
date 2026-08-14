@@ -1,0 +1,6 @@
+# Справочник «Олимпиады с БВИ»
+# Сейчас сайт закрыт от индексации. Чтобы открыть — удалите строку Disallow
+# и meta-тег robots noindex в index.html.
+
+User-agent: *
+Disallow: /
