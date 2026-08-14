@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Unbounded", "Golos Text", system-ui, sans-serif;
+  --font-body: "Golos Text", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-ink-950: #05080f;
+  --color-ink-900: #080d18;
+  --color-ink-850: #0b1220;
+  --color-ink-800: #0e1626;
+  --color-ink-700: #15203a;
+  --color-ink-600: #1d2c4e;
+
+  --color-signal-300: #7dd3fc;
+  --color-signal-400: #38bdf8;
+  --color-signal-500: #0ea5e9;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink-950);
+  color: #e6edf7;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(56, 189, 248, 0.28);
+  color: #f0f7ff;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1d2c4e transparent;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #1d2c4e;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- фоновые слои ---------- */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(125, 211, 252, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 30%, transparent 78%);
+}
+
+.bg-noise {
+  background-image: url("image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
+
+/* ---------- анимации ---------- */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 46s linear infinite;
+}
+.marquee-hover:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -26px, 0) scale(1.06); }
+}
+.animate-float-slow {
+  animation: float-slow 14s ease-in-out infinite;
+}
+.animate-float-slower {
+  animation: float-slow 20s ease-in-out infinite reverse;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.8); }
+}
+.animate-pulse-dot {
+  animation: pulse-dot 2.2s ease-in-out infinite;
+}
+
+/* смена шагов в подборе */
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.step-in {
+  animation: step-in 0.45s cubic-bezier(0.2, 0.65, 0.3, 1) both;
+}
+
+/* появление по скроллу */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.65, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.65, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* подчёркивание ссылок */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s ease;
+}
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+
+/* карточки */
+.card-hover {
+  transition: transform 0.35s cubic-bezier(0.2, 0.65, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease, background-color 0.35s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 44px -18px rgba(2, 8, 20, 0.9), 0 0 0 1px rgba(56, 189, 248, 0.12);
+}
+
+.outline-number {
+  -webkit-text-stroke: 1px rgba(125, 211, 252, 0.4);
+  color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(56, 189, 248, 0.7);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------- prefers-reduced-motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-marquee,
+  .animate-float-slow,
+  .animate-float-slower,
+  .animate-pulse-dot,
+  .step-in {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .card-hover,
+  .card-hover:hover {
+    transition: none;
+    transform: none;
+  }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
